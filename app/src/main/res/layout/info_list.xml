@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="checkEntry"
+            type="com.example.checkbud.data.CheckEntry" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -11,9 +18,10 @@
         <TextView
             android:id="@+id/info_date_tv"
             style="@style/text_info"
-            android:layout_marginLeft="@dimen/margin"
             android:layout_marginStart="@dimen/margin"
+            android:layout_marginLeft="@dimen/margin"
             android:layout_marginTop="@dimen/margin"
+            android:text="@{checkEntry.date}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="1.1.2018" />
@@ -21,14 +29,15 @@
         <TextView
             android:id="@+id/info_date_label_tv"
             style="@style/text_label"
-            android:text="@string/date"
             app:layout_constraintBottom_toBottomOf="@id/info_date_tv"
             app:layout_constraintEnd_toEndOf="@id/info_date_tv"
-            app:layout_constraintTop_toBottomOf="@id/info_date_tv" />
+            app:layout_constraintTop_toBottomOf="@id/info_date_tv"
+            tools:text="@string/date" />
 
         <TextView
             android:id="@+id/info_invalid_tv"
             style="@style/text_info"
+            android:text="@{String.valueOf(checkEntry.invalid)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/info_note_tv"
             app:layout_constraintTop_toTopOf="@id/info_note_tv"
@@ -37,6 +46,7 @@
         <TextView
             android:id="@+id/info_note_tv"
             style="@style/text_info"
+            android:text="@{String.valueOf(checkEntry.note)}"
             app:layout_constraintEnd_toStartOf="@id/info_invalid_tv"
             app:layout_constraintStart_toEndOf="@id/info_valid_tv"
             app:layout_constraintTop_toTopOf="@id/info_valid_tv"
@@ -45,6 +55,7 @@
         <TextView
             android:id="@+id/info_valid_tv"
             style="@style/text_info"
+            android:text="@{String.valueOf(checkEntry.valid)}"
             app:layout_constraintBottom_toBottomOf="@+id/info_date_tv"
             app:layout_constraintEnd_toStartOf="@id/info_note_tv"
             app:layout_constraintStart_toEndOf="@+id/info_date_tv"

@@ -5,6 +5,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.util.List;
+
 @Entity(tableName = "checkBuddy")
 public class CheckEntry {
 
@@ -26,7 +28,6 @@ public class CheckEntry {
     private int note;
     @ColumnInfo(name = DATE)
     private String date;
-
 
     //constructor without ID
     @Ignore

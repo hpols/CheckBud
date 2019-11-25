@@ -1,21 +1,19 @@
 package com.example.checkbud.utils;
 
-import android.content.Context;
 import android.database.Cursor;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.checkbud.R;
 import com.example.checkbud.data.CheckEntry;
+import com.example.checkbud.databinding.InfoListBinding;
 
+import java.util.Collections;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * {@link CheckAdapter} uses a {@link Cursor} to populate a {@link RecyclerView}.
@@ -23,16 +21,13 @@ import butterknife.ButterKnife;
 public class CheckAdapter extends RecyclerView.Adapter<CheckAdapter.CheckViewHolder> {
 
     //context and cursor to be used throughout this adapter.
-    private final Context ctxt;
     private List<CheckEntry> checkEntries;
+
 
     /**
      * Constructor
-     *
-     * @param ctxt is the context wherein the adapter operates
      */
-    public CheckAdapter(@NonNull Context ctxt) {
-        this.ctxt = ctxt;
+    public CheckAdapter() {
     }
 
     /**
@@ -46,10 +41,10 @@ public class CheckAdapter extends RecyclerView.Adapter<CheckAdapter.CheckViewHol
     @Override
     public CheckViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(ctxt).inflate(R.layout.info_list, parent, false);
-        view.setFocusable(true);
-
-        return new CheckViewHolder(view);
+        InfoListBinding infoListBinding =
+                DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                        R.layout.info_list, parent, false);
+        return new CheckViewHolder(infoListBinding);
     }
 
     /**
@@ -60,12 +55,9 @@ public class CheckAdapter extends RecyclerView.Adapter<CheckAdapter.CheckViewHol
      */
     @Override
     public void onBindViewHolder(@NonNull CheckViewHolder holder, int position) {
-        final CheckEntry currentCheckEntry = checkEntries.get(position);
+        CheckEntry currentCheckEntry = checkEntries.get(position);
 
-        holder.dateTv.setText(currentCheckEntry.getDate());
-        holder.invalidTv.setText(String.valueOf(currentCheckEntry.getInvalid()));
-        holder.validTv.setText(String.valueOf(currentCheckEntry.getValid()));
-        holder.noteTv.setText(String.valueOf(currentCheckEntry.getNote()));
+        holder.bind(currentCheckEntry);
     }
 
     /**
@@ -81,6 +73,7 @@ public class CheckAdapter extends RecyclerView.Adapter<CheckAdapter.CheckViewHol
 
     public void setCheckEntries(List<CheckEntry> checkEntries) {
         this.checkEntries = checkEntries;
+        Collections.reverse(this.checkEntries);
         notifyDataSetChanged();
     }
 
@@ -89,24 +82,21 @@ public class CheckAdapter extends RecyclerView.Adapter<CheckAdapter.CheckViewHol
      */
     class CheckViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.info_date_tv)
-        TextView dateTv;
-        @BindView(R.id.info_invalid_tv)
-        TextView invalidTv;
-        @BindView(R.id.info_note_tv)
-        TextView noteTv;
-        @BindView(R.id.info_valid_tv)
-        TextView validTv;
+        private final InfoListBinding infoListBinding;
 
         /**
          * Constructor
          *
-         * @param itemView is the view in question
+         * @param infoListBinding is the databinding of the item
          */
-        CheckViewHolder(View itemView) {
-            super(itemView);
+        CheckViewHolder(InfoListBinding infoListBinding) {
+            super(infoListBinding.getRoot());
+            this.infoListBinding = infoListBinding;
+        }
 
-            ButterKnife.bind(this, itemView);
+        public void bind(CheckEntry checkEntry) {
+            infoListBinding.setCheckEntry(checkEntry);
+            infoListBinding.executePendingBindings();
         }
     }
 }

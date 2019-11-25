@@ -9,23 +9,17 @@
         android:layout_height="match_parent"
         tools:context="com.example.android.checkbuddy.MainActivity">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_buttons"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.25" />
-
         <ImageButton
             android:id="@+id/main_valid_ib"
             style="@style/button"
             android:layout_width="0dp"
             android:contentDescription="@string/valid"
             android:onClick="buttonClicks"
+            android:padding="@dimen/margin"
             app:layout_constraintEnd_toStartOf="@+id/main_note_ib"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline_buttons"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_check" />
 
         <ImageButton
@@ -52,23 +46,16 @@
             app:layout_constraintTop_toTopOf="@+id/main_note_ib"
             app:srcCompat="@drawable/ic_clear" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_table"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.5" />
-
         <View
             android:id="@+id/main_tableHeader_v"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_margin="@dimen/margin"
             android:background="@color/colorPrimaryDark"
-            app:layout_constraintBottom_toTopOf="@+id/main_percentage_tv"
+            android:paddingTop="@dimen/margin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/main_totalLabel_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/main_valid_ib" />
 
         <View
             android:id="@+id/main_tableBody_v"
@@ -85,23 +72,26 @@
             style="@style/text_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/margin"
+            android:layout_marginLeft="@dimen/margin"
             android:text="@string/percentage"
             app:layout_constraintEnd_toStartOf="@+id/main_totalLabel_tv"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline_table" />
+            app:layout_constraintTop_toTopOf="@+id/main_tableHeader_v"
+            tools:layout_editor_absoluteY="382dp" />
 
         <TextView
             android:id="@+id/main_totalLabel_tv"
             style="@style/text_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin"
+            android:layout_marginEnd="@dimen/margin"
+            android:layout_marginRight="@dimen/margin"
             android:text="@string/total"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/main_percentLabel_tv"
-            app:layout_constraintTop_toTopOf="@+id/guideline_table" />
+            app:layout_constraintTop_toTopOf="@+id/main_tableHeader_v"
+            tools:layout_editor_absoluteY="382dp" />
 
         <TextView
             android:id="@+id/main_percentage_tv"
@@ -124,28 +114,16 @@
             app:layout_constraintTop_toBottomOf="@+id/main_totalLabel_tv"
             tools:text="123" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_goto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.75" />
 
-        <Button
-            android:id="@+id/main_goToInfo_tv"
-            style="@style/text_main"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin"
-            android:layout_marginEnd="@dimen/margin"
-            android:background="?selectableItemBackgroundBorderless"
-            android:onClick="buttonClicks"
-            android:text="@string/go_to_info_panel"
-            android:textAllCaps="false"
-            android:textColor="@color/colorPrimaryDark"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="@dimen/margin"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/guideline_goto" />
+            app:layout_constraintTop_toBottomOf="@+id/main_tableBody_v" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

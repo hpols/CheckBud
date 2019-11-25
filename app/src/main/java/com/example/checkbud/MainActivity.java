@@ -1,18 +1,23 @@
 package com.example.checkbud;
 
 import android.app.AlertDialog;
+
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import android.content.Context;
+
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
+
 import androidx.databinding.DataBindingUtil;
+
 import android.os.Build;
 import android.preference.PreferenceManager;
+
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +28,7 @@ import com.example.checkbud.data.CheckEntry;
 import com.example.checkbud.data.CheckViewModel;
 import com.example.checkbud.data.EntryExecutor;
 import com.example.checkbud.databinding.ActivityMainBinding;
+import com.example.checkbud.utils.CheckAdapter;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -49,11 +55,23 @@ public class MainActivity extends AppCompatActivity {
     private CheckViewModel checkViewModel;
     private static CheckDb checkDb;
     private List<CheckEntry> checkEntryList;
+    private CheckAdapter checkAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mainBinder = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPrefEd = sharedPref.edit();
+        sharedPrefEd.apply();
+        checkDb = CheckDb.getInstance(getApplicationContext());
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this,
+                LinearLayoutManager.VERTICAL, false);
+        checkAdapter = new CheckAdapter();
+        mainBinder.recycler.setLayoutManager(layoutManager);
+        mainBinder.recycler.setAdapter(checkAdapter);
 
         //setup viewModel
         checkViewModel = ViewModelProviders.of(this).get(CheckViewModel.class);
@@ -71,13 +89,10 @@ public class MainActivity extends AppCompatActivity {
                 }
                 updatePercentage();
                 displayTotal();
+
+                checkAdapter.setCheckEntries(checkEntries);
             }
         });
-
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        sharedPrefEd = sharedPref.edit();
-        sharedPrefEd.apply();
-        checkDb = CheckDb.getInstance(getApplicationContext());
     }
 
     public static void setDbEmptyBoolean(Boolean input) {
@@ -149,12 +164,6 @@ public class MainActivity extends AppCompatActivity {
         setDbEmptyBoolean(true); //reset boolean
     }
 
-    @Override
-    protected void onStop() {
-        syncData(checkDb, this, false);
-        super.onStop();
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     public void buttonClicks(View view) {
         switch (view.getId()) {
@@ -172,9 +181,9 @@ public class MainActivity extends AppCompatActivity {
                 updatePercentage();
                 displayTotal();
                 break;
-            case R.id.main_goToInfo_tv:
-                syncData(checkDb,this, true);//write to db and then go to info
         }
+        syncData(checkDb);//write to db and update rv
+        checkAdapter.notifyDataSetChanged();
     }
 
     //How many items are validCurr of those flagged as validCurr or invalidCurr – in percent
@@ -210,17 +219,12 @@ public class MainActivity extends AppCompatActivity {
      * Task to upsert the current days work into the database.
      *
      * @param checkDb Is the database the data is written to
-     * @param ctxt is the context from which the method has been called
-     * @param gotoInfo indicates whether the user wants to go to the info overview
      */
-    private void syncData(final CheckDb checkDb, final Context ctxt, final boolean gotoInfo) {
+    private void syncData(final CheckDb checkDb) {
 
         if (invalidCurr == 0 && noteCurr == 0
                 && validCurr == 0) {
-            if (gotoInfo) {
-                Intent goToInfo = new Intent(MainActivity.this, OverviewActivity.class);
-                startActivity(goToInfo);
-            }
+
             resetInts();
             return;
         }
@@ -260,10 +264,6 @@ public class MainActivity extends AppCompatActivity {
             protected void finalize() throws Throwable {
                 super.finalize();
 
-                if (gotoInfo) {
-                    Intent goToInfo = new Intent(MainActivity.this, OverviewActivity.class);
-                    startActivity(goToInfo);
-                }
             }
         });
     }
