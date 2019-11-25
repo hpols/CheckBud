@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:id="@+id/info_date_tv"
+            style="@style/text_info"
+            android:layout_marginLeft="@dimen/margin"
+            android:layout_marginStart="@dimen/margin"
+            android:layout_marginTop="@dimen/margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="1.1.2018" />
+
+        <TextView
+            android:id="@+id/info_date_label_tv"
+            style="@style/text_label"
+            android:text="@string/date"
+            app:layout_constraintBottom_toBottomOf="@id/info_date_tv"
+            app:layout_constraintEnd_toEndOf="@id/info_date_tv"
+            app:layout_constraintTop_toBottomOf="@id/info_date_tv" />
+
+        <TextView
+            android:id="@+id/info_invalid_tv"
+            style="@style/text_info"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/info_note_tv"
+            app:layout_constraintTop_toTopOf="@id/info_note_tv"
+            tools:text="50" />
+
+        <TextView
+            android:id="@+id/info_note_tv"
+            style="@style/text_info"
+            app:layout_constraintEnd_toStartOf="@id/info_invalid_tv"
+            app:layout_constraintStart_toEndOf="@id/info_valid_tv"
+            app:layout_constraintTop_toTopOf="@id/info_valid_tv"
+            tools:text="25" />
+
+        <TextView
+            android:id="@+id/info_valid_tv"
+            style="@style/text_info"
+            app:layout_constraintBottom_toBottomOf="@+id/info_date_tv"
+            app:layout_constraintEnd_toStartOf="@id/info_note_tv"
+            app:layout_constraintStart_toEndOf="@+id/info_date_tv"
+            tools:text="05" />
+
+        <ImageView
+            android:id="@+id/info_invalid_iv"
+            style="@style/info_image"
+            android:background="@drawable/round_border"
+            android:contentDescription="@string/invalid_symbol"
+            android:tint="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="@id/info_invalid_tv"
+            app:layout_constraintEnd_toEndOf="@id/info_invalid_tv"
+            app:layout_constraintTop_toBottomOf="@id/info_invalid_tv"
+            app:srcCompat="@drawable/ic_clear" />
+
+        <ImageView
+            android:id="@+id/info_note_iv"
+            style="@style/info_image"
+            android:background="@drawable/round_border"
+            android:contentDescription="@string/note_symbol"
+            android:tint="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="@id/info_note_tv"
+            app:layout_constraintEnd_toEndOf="@id/info_note_tv"
+            app:layout_constraintTop_toBottomOf="@id/info_note_tv"
+            app:srcCompat="@drawable/ic_create" />
+
+        <ImageView
+            android:id="@+id/info_valid_iv"
+            style="@style/info_image"
+            android:background="@drawable/round_border"
+            android:contentDescription="@string/valid_symbol"
+            android:tint="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="@id/info_valid_tv"
+            app:layout_constraintEnd_toEndOf="@id/info_valid_tv"
+            app:layout_constraintTop_toBottomOf="@id/info_valid_tv"
+            app:srcCompat="@drawable/ic_check" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

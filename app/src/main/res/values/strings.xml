@@ -1,0 +1,28 @@
+<resources>
+    <!-- Activities -->
+    <string name="app_name" translatable="true">CheckBud</string>
+    <string name="valid" translatable="true">Valid</string>
+    <string name="note" translatable="true">Make Note</string>
+    <string name="invalid" translatable="true">Invalid</string>
+    <string name="percentage_starter" translatable="false">–</string>
+    <string name="total" translatable="true">Total</string>
+    <string name="percentage" translatable="true">Percentage</string>
+    <string name="title_activity_info" translatable="true">Overview</string>
+    <string name="date" translatable="true"> Date</string>
+    <string name="invalid_symbol" translatable="true">invalid symbol</string>
+    <string name="note_symbol" translatable="true">note_symbol</string>
+    <string name="valid_symbol" translatable="true">valid symbol</string>
+    <string name="empty_info" translatable="true">Currently there are no new checks saved since the last payment.</string>
+    <string name="go_to_info_panel" translatable="true"> Go To Overview > > ></string>
+
+    <!-- Settings, Navigation & Menu -->
+    <string name="reset" translatable="true">Reset</string>
+
+    <!-- Reset Dialog -->
+    <string name="reset_alert" translatable="true">Once you proceed all currently stored code-checks will be deleted.</string>
+    <string name="yes" translatable="true">Yes</string>
+    <string name="cancel" translatable="true">Cancel</string>
+    <string name="alert_title" translatable="true">Ready to start a clean slate?</string>
+    <string name="title_activity_overview">OverviewActivity</string>
+
+</resources>

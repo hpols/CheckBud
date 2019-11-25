@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ConstraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.example.android.checkbuddy.MainActivity">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.25" />
+
+        <ImageButton
+            android:id="@+id/main_valid_ib"
+            style="@style/button"
+            android:layout_width="0dp"
+            android:contentDescription="@string/valid"
+            android:onClick="buttonClicks"
+            app:layout_constraintEnd_toStartOf="@+id/main_note_ib"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline_buttons"
+            app:srcCompat="@drawable/ic_check" />
+
+        <ImageButton
+            android:id="@+id/main_note_ib"
+            style="@style/button"
+            android:layout_width="0dp"
+            android:contentDescription="@string/note"
+            android:onClick="buttonClicks"
+            app:layout_constraintBottom_toBottomOf="@+id/main_valid_ib"
+            app:layout_constraintEnd_toStartOf="@+id/main_invalid_ib"
+            app:layout_constraintStart_toEndOf="@+id/main_valid_ib"
+            app:layout_constraintTop_toTopOf="@+id/main_valid_ib"
+            app:srcCompat="@drawable/ic_create" />
+
+        <ImageButton
+            android:id="@+id/main_invalid_ib"
+            style="@style/button"
+            android:layout_width="0dp"
+            android:contentDescription="@string/invalid"
+            android:onClick="buttonClicks"
+            app:layout_constraintBottom_toBottomOf="@+id/main_note_ib"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/main_note_ib"
+            app:layout_constraintTop_toTopOf="@+id/main_note_ib"
+            app:srcCompat="@drawable/ic_clear" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_table"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <View
+            android:id="@+id/main_tableHeader_v"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_margin="@dimen/margin"
+            android:background="@color/colorPrimaryDark"
+            app:layout_constraintBottom_toTopOf="@+id/main_percentage_tv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/main_totalLabel_tv" />
+
+        <View
+            android:id="@+id/main_tableBody_v"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="@+id/main_total_tv"
+            app:layout_constraintEnd_toEndOf="@+id/main_tableHeader_v"
+            app:layout_constraintStart_toStartOf="@+id/main_tableHeader_v"
+            app:layout_constraintTop_toTopOf="@+id/main_percentage_tv" />
+
+        <TextView
+            android:id="@+id/main_percentLabel_tv"
+            style="@style/text_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin"
+            android:layout_marginTop="8dp"
+            android:text="@string/percentage"
+            app:layout_constraintEnd_toStartOf="@+id/main_totalLabel_tv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline_table" />
+
+        <TextView
+            android:id="@+id/main_totalLabel_tv"
+            style="@style/text_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin"
+            android:text="@string/total"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/main_percentLabel_tv"
+            app:layout_constraintTop_toTopOf="@+id/guideline_table" />
+
+        <TextView
+            android:id="@+id/main_percentage_tv"
+            style="@style/text_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/main_percentLabel_tv"
+            app:layout_constraintStart_toStartOf="@+id/main_percentLabel_tv"
+            app:layout_constraintTop_toBottomOf="@+id/main_percentLabel_tv"
+            tools:text="10%" />
+
+        <TextView
+            android:id="@+id/main_total_tv"
+            style="@style/text_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin"
+            app:layout_constraintEnd_toEndOf="@+id/main_totalLabel_tv"
+            app:layout_constraintStart_toStartOf="@+id/main_totalLabel_tv"
+            app:layout_constraintTop_toBottomOf="@+id/main_totalLabel_tv"
+            tools:text="123" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_goto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.75" />
+
+        <Button
+            android:id="@+id/main_goToInfo_tv"
+            style="@style/text_main"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin"
+            android:layout_marginEnd="@dimen/margin"
+            android:background="?selectableItemBackgroundBorderless"
+            android:onClick="buttonClicks"
+            android:text="@string/go_to_info_panel"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimaryDark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/guideline_goto" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
