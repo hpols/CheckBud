@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
+    <data class="UpdateListBinding">
 
         <variable
             name="checkEntry"
@@ -13,18 +13,19 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorPrimaryDark">
 
-        <TextView
+        <EditText
             android:id="@+id/info_date_et"
             style="@style/text_info"
             android:layout_marginStart="@dimen/margin"
             android:layout_marginLeft="@dimen/margin"
             android:layout_marginTop="@dimen/margin"
+            android:hint="2018/01/01"
             android:text="@{checkEntry.date}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="1.1.2018" />
+            tools:text="2018/01/01" />
 
         <TextView
             android:id="@+id/info_date_label_tv"
@@ -34,27 +35,33 @@
             app:layout_constraintTop_toBottomOf="@id/info_date_et"
             tools:text="@string/date" />
 
-        <TextView
+        <EditText
             android:id="@+id/info_invalid_et"
             style="@style/text_info"
+            android:hint="50"
+            android:inputType="number"
             android:text="@{String.valueOf(checkEntry.invalid)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/info_note_et"
             app:layout_constraintTop_toTopOf="@id/info_note_et"
             tools:text="50" />
 
-        <TextView
+        <EditText
             android:id="@+id/info_note_et"
             style="@style/text_info"
+            android:hint="25"
+            android:inputType="number"
             android:text="@{String.valueOf(checkEntry.note)}"
             app:layout_constraintEnd_toStartOf="@id/info_invalid_et"
             app:layout_constraintStart_toEndOf="@id/info_valid_et"
             app:layout_constraintTop_toTopOf="@id/info_valid_et"
             tools:text="25" />
 
-        <TextView
+        <EditText
             android:id="@+id/info_valid_et"
             style="@style/text_info"
+            android:hint="05"
+            android:inputType="number"
             android:text="@{String.valueOf(checkEntry.valid)}"
             app:layout_constraintBottom_toBottomOf="@+id/info_date_et"
             app:layout_constraintEnd_toStartOf="@id/info_note_et"

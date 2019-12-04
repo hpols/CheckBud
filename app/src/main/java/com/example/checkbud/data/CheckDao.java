@@ -25,6 +25,9 @@ public interface CheckDao {
     @Query("SELECT * FROM checkBuddy ORDER BY date DESC LIMIT 1")
     CheckEntry getLastEntry();
 
+    @Query("SELECT * FROM checkBuddy WHERE date IS :date")
+    CheckEntry getEntryByDate(String date);
+
     //––– UPDATE Methods –––//
 
     @Update(onConflict = OnConflictStrategy.IGNORE)
@@ -33,4 +36,7 @@ public interface CheckDao {
     // –––DELETE METHODS –––//
     @Query("DELETE FROM checkBuddy")
     void clearTable();
+
+    @Query ("DELETE FROM checkBuddy Where date IS :date")
+    int deleteEntry(String date);
 }

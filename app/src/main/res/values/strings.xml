@@ -24,5 +24,7 @@
     <string name="cancel" translatable="true">Cancel</string>
     <string name="alert_title" translatable="true">Ready to start a clean slate?</string>
     <string name="title_activity_overview">OverviewActivity</string>
+    <string name="snack_bar_undo">Undo</string>
+    <string name="snack_bar_text">The entry has been deleted.</string>
 
 </resources>

@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="checkEntry"
+            type="com.example.checkbud.data.CheckEntry" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ConstraintLayout"
         android:layout_width="match_parent"
@@ -114,6 +120,17 @@
             app:layout_constraintTop_toBottomOf="@+id/main_totalLabel_tv"
             tools:text="123" />
 
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@color/colorPrimaryDark"
+            android:layout_marginTop="@dimen/margin"
+            android:layout_marginBottom="@dimen/margin"
+            app:layout_constraintBottom_toTopOf="@+id/recycler"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/main_tableBody_v" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler"
@@ -123,7 +140,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/main_tableBody_v" />
+            app:layout_constraintTop_toBottomOf="@+id/divider" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

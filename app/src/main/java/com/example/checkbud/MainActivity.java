@@ -1,27 +1,22 @@
 package com.example.checkbud;
 
 import android.app.AlertDialog;
-
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-
-import androidx.databinding.DataBindingUtil;
-
-import android.os.Build;
-import android.preference.PreferenceManager;
-
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.checkbud.data.CheckDb;
 import com.example.checkbud.data.CheckEntry;
@@ -29,14 +24,17 @@ import com.example.checkbud.data.CheckViewModel;
 import com.example.checkbud.data.EntryExecutor;
 import com.example.checkbud.databinding.ActivityMainBinding;
 import com.example.checkbud.utils.CheckAdapter;
+import com.example.checkbud.utils.SwipeToDeleteCallback;
+import com.google.android.material.snackbar.Snackbar;
 
-import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CheckAdapter.CheckAdapterInterface {
+
+    public static final String TAG = MainActivity.class.getSimpleName();
 
     private ActivityMainBinding mainBinder;
 
@@ -69,9 +67,12 @@ public class MainActivity extends AppCompatActivity {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false);
-        checkAdapter = new CheckAdapter();
+        checkAdapter = new CheckAdapter(this);
         mainBinder.recycler.setLayoutManager(layoutManager);
         mainBinder.recycler.setAdapter(checkAdapter);
+        ItemTouchHelper itemTouchHelper = new
+                ItemTouchHelper(new SwipeToDeleteCallback(checkAdapter, this));
+        itemTouchHelper.attachToRecyclerView(mainBinder.recycler);
 
         //setup viewModel
         checkViewModel = ViewModelProviders.of(this).get(CheckViewModel.class);
@@ -164,7 +165,6 @@ public class MainActivity extends AppCompatActivity {
         setDbEmptyBoolean(true); //reset boolean
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     public void buttonClicks(View view) {
         switch (view.getId()) {
             case R.id.main_valid_ib:
@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void displayTotal() {
+    public void displayTotal() {
         total = validCurr + noteCurr + invalidCurr + validDb + noteDb + invalidDb;
         mainBinder.mainTotalTv.setText(String.valueOf(total));
     }
@@ -222,22 +222,23 @@ public class MainActivity extends AppCompatActivity {
      */
     private void syncData(final CheckDb checkDb) {
 
-        if (invalidCurr == 0 && noteCurr == 0
-                && validCurr == 0) {
+        if (invalidCurr == 0 && noteCurr == 0 && validCurr == 0) {
 
             resetInts();
             return;
         }
 
-        Date current = new Date();
-        final String currentDate = DateFormat.getDateInstance(DateFormat.SHORT,
-                Locale.getDefault()).format(current);
+        // 2019-03-29
+        final String currentDate = String.format(Locale.getDefault(), "%1$tY-%<tm-%<td",
+                Calendar.getInstance());
+        Log.v(TAG, "Current date: " + currentDate);
 
         final CheckEntry[] lastEntry = new CheckEntry[1];
         EntryExecutor.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
                 lastEntry[0] = checkDb.checkDao().getLastEntry();
+                Log.v(TAG, "last entry: " + lastEntry[0].getDate());
 
                 // If no work has been added on the current day, insert an new row of data with
                 // the current values as currently entered by the user in the MainActivity.
@@ -279,5 +280,61 @@ public class MainActivity extends AppCompatActivity {
         validDb = 0;
         noteDb = 0;
         invalidDb = 0;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        resetInts();
+    }
+
+    @Override
+    public void updateItem(final CheckEntry currentEntry) {
+        final CheckEntry[] entry = new CheckEntry[1];
+        EntryExecutor.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                //get entry to update
+                entry[0] = checkDb.checkDao().getEntryByDate(currentEntry.getDate());
+
+                checkDb.checkDao().updateEntry(currentEntry);
+
+                //TODO: Update increases total count
+
+            }
+        });
+    }
+
+    @Override
+    public void deleteItem(final CheckEntry selectedEntry, final int checkEntryPosition) {
+
+        final int[] deletedItem = new int[1];
+
+        EntryExecutor.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                deletedItem[0] = checkDb.checkDao().deleteEntry(selectedEntry.getDate());
+            }
+        });
+
+        if (deletedItem[0] != 0) {
+            checkAdapter.notifyItemRemoved(checkEntryPosition);
+            View view = findViewById(R.id.ConstraintLayout);
+            Snackbar snackbar = Snackbar.make(view, R.string.snack_bar_text,
+                    Snackbar.LENGTH_LONG);
+            snackbar.setAction(R.string.snack_bar_undo, new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    EntryExecutor.getInstance().diskIO().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            checkDb.checkDao().createEntry(selectedEntry);
+                            checkAdapter.notifyItemInserted(checkEntryPosition);
+                        }
+                    });
+                }
+            });
+            snackbar.show();
+        }
     }
 }

@@ -1,11 +1,12 @@
 package com.example.checkbud.data;
 
+import android.view.View;
+import android.widget.Toast;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-
-import java.util.List;
 
 @Entity(tableName = "checkBuddy")
 public class CheckEntry {
@@ -90,5 +91,16 @@ public class CheckEntry {
     public CheckEntry setDate(String date) {
         this.date = date;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "CheckEntry{" +
+                "id=" + id +
+                ", valid=" + valid +
+                ", invalid=" + invalid +
+                ", note=" + note +
+                ", date='" + date + '\'' +
+                '}';
     }
 }
