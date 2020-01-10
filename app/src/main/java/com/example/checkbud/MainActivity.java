@@ -222,12 +222,6 @@ public class MainActivity extends AppCompatActivity implements CheckAdapter.Chec
      */
     private void syncData(final CheckDb checkDb) {
 
-        if (invalidCurr == 0 && noteCurr == 0 && validCurr == 0) {
-
-            resetInts();
-            return;
-        }
-
         // 2019-03-29
         final String currentDate = String.format(Locale.getDefault(), "%1$tY-%<tm-%<td",
                 Calendar.getInstance());
@@ -237,26 +231,34 @@ public class MainActivity extends AppCompatActivity implements CheckAdapter.Chec
         EntryExecutor.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                lastEntry[0] = checkDb.checkDao().getLastEntry();
-                Log.v(TAG, "last entry: " + lastEntry[0].getDate());
-
-                // If no work has been added on the current day, insert an new row of data with
-                // the current values as currently entered by the user in the MainActivity.
-                if (lastEntry[0] == null || !lastEntry[0].getDate().equals(currentDate)) {
+                if (getDbEmptyBoolean()) {
                     final CheckEntry newEntry = new CheckEntry(currentDate, validCurr,
                             invalidCurr, noteCurr);
 
                     checkDb.checkDao().createEntry(newEntry);
-                    //otherwise update the current days values.
                 } else {
-                    lastEntry[0].setDate(currentDate);
-                    lastEntry[0].setValid(validCurr + lastEntry[0].getValid());
-                    lastEntry[0].setInvalid(invalidCurr + lastEntry[0].getInvalid());
-                    lastEntry[0].setNote(noteCurr + lastEntry[0].getNote());
+                    lastEntry[0] = checkDb.checkDao().getLastEntry();
+                    Log.v(TAG, "last entry: " + lastEntry[0].getDate());
 
-                    checkDb.checkDao().updateEntry(lastEntry[0]);
+                    // If no work has been added on the current day, insert an new row of data with
+                    // the current values as currently entered by the user in the MainActivity.
+                    if (lastEntry[0] == null || !lastEntry[0].getDate().equals(currentDate)) {
+                        final CheckEntry newEntry = new CheckEntry(currentDate, validCurr,
+                                invalidCurr, noteCurr);
 
+                        checkDb.checkDao().createEntry(newEntry);
+                        //otherwise update the current days values.
+                    } else {
+                        lastEntry[0].setDate(currentDate);
+                        lastEntry[0].setValid(validCurr + lastEntry[0].getValid());
+                        lastEntry[0].setInvalid(invalidCurr + lastEntry[0].getInvalid());
+                        lastEntry[0].setNote(noteCurr + lastEntry[0].getNote());
+
+                        checkDb.checkDao().updateEntry(lastEntry[0]);
+
+                    }
                 }
+
                 resetInts();
                 setDbEmptyBoolean(false);
             }
